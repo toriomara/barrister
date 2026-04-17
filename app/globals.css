@@ -1,0 +1,184 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ── Светлая тема ─────────────────────────────────────────────
+       Background:  #FFFFFF
+       Surface:     #F8F9FB
+       Navy brand:  #1E2A38  (основной, используйте bg-navy / text-navy)
+       Text:        #1A1A1A
+       Text muted:  #6B7280
+       Accent:      #C9A96E  (премиум золото)
+       Button:      #2F5EFF  (→ --primary)
+       Border:      #E5E7EB
+    ───────────────────────────────────────────────────────────── */
+    --background: 0 0% 100%; /* #FFFFFF */
+    --foreground: 0 0% 10%; /* #1A1A1A */
+
+    --card: 220 26% 98%; /* #F8F9FB */
+    --card-foreground: 0 0% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+
+    --primary: 204 100% 11%; /* #002137 */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 95%;
+    --secondary-foreground: 212 30% 17%; /* #1E2A38 navy */
+
+    --muted: 220 14% 95%;
+    --muted-foreground: 220 9% 46%; /* #6B7280 */
+
+    --accent: 39 46% 61%; /* #C9A96E золото */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%; /* #E5E7EB */
+    --input: 220 13% 91%;
+    --ring: 204 100% 11%; /* #002137 */
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* ── Тёмная тема — тёплая кожаная палитра ────────────────────
+       Espresso:   #180F0A  (фон страницы)
+       Chocolate:  #241510  (карточки, панели)
+       Coffee:     #3A1D11  (вторичные поверхности)
+       Ivory:      #EDE0C8  (основной текст)
+       Sand:       #9A7D62  (второстепенный текст)
+       Caramel:    #C17830  (акцент, кнопки, ссылки)
+       Chestnut:   #4B2416  (бордеры)
+    ───────────────────────────────────────────────────────────── */
+    --background: 20 35% 7%; /* espresso  #180F0A */
+    --foreground: 38 55% 87%; /* ivory     #EDE0C8 */
+
+    --card: 18 38% 11%; /* chocolate #241510 */
+    --card-foreground: 38 55% 87%;
+
+    --popover: 18 38% 11%;
+    --popover-foreground: 38 55% 87%;
+
+    --primary: 30 60% 47%; /* caramel   #C17830 */
+    --primary-foreground: 20 35% 7%; /* espresso на карамели */
+
+    --secondary: 20 52% 15%; /* coffee    #3A1D11 */
+    --secondary-foreground: 38 55% 87%;
+
+    --muted: 20 52% 15%; /* coffee */
+    --muted-foreground: 28 22% 49%; /* sand      #9A7D62 */
+
+    --accent: 30 60% 47%; /* caramel */
+    --accent-foreground: 20 35% 7%;
+
+    --destructive: 0 60% 42%;
+    --destructive-foreground: 38 55% 87%;
+
+    --border: 20 52% 19%; /* chestnut  #4B2416 */
+    --input: 20 52% 19%;
+    --ring: 30 60% 47%; /* caramel */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-inter), "Inter", system-ui, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
+  }
+}
+
+@layer components {
+  .prose-content h1 {
+    @apply text-3xl font-bold mb-4 mt-8 font-serif;
+  }
+  .prose-content h2 {
+    @apply text-2xl font-semibold mb-3 mt-6 font-serif;
+  }
+  .prose-content h3 {
+    @apply text-xl font-semibold mb-2 mt-5 font-serif;
+  }
+  .prose-content p {
+    @apply mb-4 leading-relaxed;
+  }
+  .prose-content ul {
+    @apply list-disc pl-6 mb-4 space-y-1;
+  }
+  .prose-content ol {
+    @apply list-decimal pl-6 mb-4 space-y-1;
+  }
+  .prose-content li {
+    @apply leading-relaxed;
+  }
+  .prose-content a {
+    @apply text-primary underline hover:no-underline;
+  }
+  .prose-content blockquote {
+    @apply border-l-4 border-accent pl-4 italic my-4 text-muted-foreground;
+  }
+  .prose-content strong {
+    @apply font-semibold;
+  }
+  .prose-content em {
+    @apply italic;
+  }
+  .prose-content code {
+    @apply bg-muted px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+  .prose-content pre {
+    @apply bg-muted p-4 rounded-lg overflow-x-auto mb-4;
+  }
+  .prose-content hr {
+    @apply border-border my-8;
+  }
+}
+
+/* Tiptap editor styles */
+.tiptap-editor .ProseMirror {
+  @apply min-h-[300px] p-4 outline-none;
+}
+.tiptap-editor .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  @apply text-muted-foreground pointer-events-none float-left h-0;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-muted;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/30 rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/50;
+}
+
+.link {
+  @apply cursor-pointer hover:text-primary hover:underline decoration-1 underline-offset-4 transform transition-all delay-1000;
+}
