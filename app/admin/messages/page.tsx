@@ -20,7 +20,7 @@ export default async function AdminMessagesPage() {
         <Card className="p-8 text-center text-muted-foreground">Сообщений пока нет</Card>
       ) : (
         <div className="space-y-3">
-          {messages.map((msg) => (
+          {messages.map((msg: typeof messages[0]) => (
             <Card key={msg.id} className={msg.read ? '' : 'ring-1 ring-primary/30'}>
               <CardContent className="p-4">
                 <div className="flex items-start justify-between gap-4 mb-3">
