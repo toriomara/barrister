@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Shield, Scale, Briefcase, Users, Home, UserCog,
@@ -578,90 +578,55 @@ function ServiceAccordion({ item }: { item: ServiceItem }) {
 }
 
 export function ServicesFullPage() {
-  const [activeId, setActiveId] = useState(CATEGORIES[0].id)
-  const navRef = useRef<HTMLDivElement>(null)
-  const sectionRefs = useRef<Record<string, HTMLElement | null>>({})
-
-  // Scrollspy
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id)
-          }
-        })
-      },
-      { rootMargin: '-30% 0px -60% 0px' }
-    )
-    CATEGORIES.forEach(({ id }) => {
-      const el = document.getElementById(id)
-      if (el) observer.observe(el)
-    })
-    return () => observer.disconnect()
-  }, [])
-
-  const scrollToCategory = (id: string) => {
-    const el = document.getElementById(id)
-    if (!el) return
-    const offset = 80
-    const top = el.getBoundingClientRect().top + window.scrollY - offset
-    window.scrollTo({ top, behavior: 'smooth' })
-  }
+  const [activeTab, setActiveTab] = useState(CATEGORIES[0].id)
+  const category = CATEGORIES.find((c) => c.id === activeTab)!
+  const Icon = category.icon
 
   return (
     <>
-      {/* Sticky category nav */}
-      <div className="sticky top-0 z-30 bg-background/95 backdrop-blur border-b border-border">
+      {/* Tab bar */}
+      <div className="sticky top-16 md:top-20 z-30 bg-background/95 backdrop-blur">
         <div
-          ref={navRef}
-          className="container mx-auto px-4 flex gap-1 overflow-x-auto py-2 scrollbar-none"
-          style={{ scrollbarWidth: 'none' }}
+          className="container mx-auto px-4 flex flex-wrap gap-2 py-3"
         >
-          {CATEGORIES.map(({ id, shortLabel, icon: Icon }) => (
+          {CATEGORIES.map(({ id, shortLabel, icon: TabIcon }) => (
             <button
               key={id}
-              onClick={() => scrollToCategory(id)}
+              onClick={() => setActiveTab(id)}
               className={cn(
-                'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm whitespace-nowrap transition-colors shrink-0',
-                activeId === id
-                  ? 'bg-primary text-primary-foreground'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                'flex items-center gap-1.5 px-4 py-2 rounded-lg border text-sm whitespace-nowrap transition-all shrink-0 font-medium',
+                activeTab === id
+                  ? 'bg-primary text-primary-foreground border-primary shadow-sm'
+                  : 'bg-background text-muted-foreground border-border hover:text-foreground hover:border-foreground/30'
               )}
             >
-              <Icon className="w-3.5 h-3.5" />
+              <TabIcon className="w-3.5 h-3.5" />
               {shortLabel}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Sections */}
-      <div className="container mx-auto px-4 py-12 space-y-20">
-        {CATEGORIES.map(({ id, label, subtitle, audience, icon: Icon, services }) => (
-          <section key={id} id={id} ref={(el) => { sectionRefs.current[id] = el }}>
-            {/* Category header */}
-            <div className="flex items-start gap-4 mb-8">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                <Icon className="w-6 h-6 text-primary" />
-              </div>
-              <div>
-                <h2 className="font-serif text-2xl font-bold">{label}</h2>
-                <p className="text-muted-foreground mt-0.5">{subtitle}</p>
-                <span className="inline-block mt-2 text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
-                  {audience}
-                </span>
-              </div>
-            </div>
+      {/* Active category */}
+      <div className="container mx-auto px-4 py-12">
+        <div className="flex items-start gap-4 mb-8">
+          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+            <Icon className="w-6 h-6 text-primary" />
+          </div>
+          <div>
+            <h2 className="font-serif text-2xl font-bold">{category.label}</h2>
+            <p className="text-muted-foreground mt-0.5">{category.subtitle}</p>
+            <span className="inline-block mt-2 text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
+              {category.audience}
+            </span>
+          </div>
+        </div>
 
-            {/* Service items */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {services.map((item) => (
-                <ServiceAccordion key={item.title} item={item} />
-              ))}
-            </div>
-          </section>
-        ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+          {category.services.map((item) => (
+            <ServiceAccordion key={item.title} item={item} />
+          ))}
+        </div>
       </div>
 
       {/* CTA */}

@@ -8,30 +8,30 @@ const contacts = [
   {
     icon: Phone,
     label: "Телефон",
-    value: "+7 (999) 123-45-67",
-    href: "tel:+79991234567",
-    desc: "Пн-Пт: 9:00–19:00, Сб: 10:00–15:00",
+    value: "+7 (960) 867-01-39",
+    href: "tel:+79608670139",
+    desc: "пн-пт: 9:00 - 19:00, сб: 10:00 - 15:00",
   },
   {
     icon: Mail,
     label: "Email",
-    value: "ivanov@lawyer.ru",
-    href: "mailto:ivanov@lawyer.ru",
+    value: "r.mordvintseff@yandex.ru",
+    href: "mailto:r.mordvintseff@yandex.ru",
     desc: "Ответ в течение 24 часов",
   },
   {
     icon: MapPin,
     label: "Адрес",
-    value: "г. Москва, ул. Тверская, д. 10, офис 205",
+    value: "400005, г. Волгоград, ул. Коммунистическая, д.21, оф. 46",
     href: null,
     desc: "Удобная парковка рядом",
   },
   {
     icon: Clock,
     label: "Режим работы",
-    value: "Пн-Пт: 9:00–19:00",
+    value: "пн-пт: 9:00 - 19:00",
     href: null,
-    desc: "Суббота: 10:00–15:00",
+    desc: "Суббота: 10:00 - 15:00",
   },
 ];
 

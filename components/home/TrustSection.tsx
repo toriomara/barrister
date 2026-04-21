@@ -14,27 +14,27 @@ import {
 const items = [
   {
     icon: UserCheck,
-    text: "Индивидуальный подход к каждому делу.",
+    text: "Индивидуальный подход к каждому делу",
   },
   {
     icon: Target,
-    text: "Чёткая правовая позиция без шаблонов.",
+    text: "Чёткая правовая позиция без шаблонов",
   },
   {
     icon: Lock,
-    text: "Конфиденциальность и деликатность.",
+    text: "Конфиденциальность и деликатность",
   },
   {
     icon: Layers,
-    text: "Ориентация на реальный результат.",
+    text: "Ориентация на реальный результат",
   },
   {
     icon: Eye,
-    text: "Внимание к деталям и судебной практике.",
+    text: "Внимание к деталям и судебной практике",
   },
   {
     icon: MessageCircle,
-    text: "Прозрачная коммуникация на всех этапах.",
+    text: "Прозрачная коммуникация на всех этапах",
   },
 ];
 
@@ -43,10 +43,12 @@ export function TrustSection() {
   const isInView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <section ref={ref} className="py-24 bg-muted/30 dark:bg-muted/10 overflow-hidden">
+    <section
+      ref={ref}
+      className="py-24 bg-muted/30 dark:bg-muted/10 overflow-hidden"
+    >
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
           {/* Left — text */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -62,17 +64,22 @@ export function TrustSection() {
 
             {/* Decorative quote */}
             <div className="relative pl-6 border-l-2 border-primary/40">
-              <span className="absolute -top-3 -left-3 text-6xl text-primary/20 font-serif leading-none select-none">
-                &ldquo;
-              </span>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Ко мне обращаются, когда важны не общие слова, а чёткая правовая позиция, внимательность к деталям и уверенное ведение дела. Я подхожу к каждому вопросу индивидуально, без шаблонов и формального отношения.
+                Ко мне обращаются, когда важны не общие слова, а чёткая правовая
+                позиция, внимательность к деталям и уверенное ведение дела. Я
+                подхожу к каждому вопросу индивидуально, без шаблонов и
+                формального отношения.
               </p>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Клиенты ценят конфиденциальность, профессиональную сдержанность и ориентацию на результат. В работе я всегда исхожу из реальной ситуации, оцениваю риски заранее и предлагаю только те решения, которые действительно могут быть полезны.
+                Клиенты ценят конфиденциальность, профессиональную сдержанность
+                и ориентацию на результат. В работе я всегда исхожу из реальной
+                ситуации, оцениваю риски заранее и предлагаю только те решения,
+                которые действительно могут быть полезны.
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                Для меня важно не просто сопровождать дело, а выстроить такую правовую защиту, которая будет понятна клиенту, обоснована с точки зрения закона и эффективна на практике.
+                Для меня важно не просто сопровождать дело, а выстроить такую
+                правовую защиту, которая будет понятна клиенту, обоснована с
+                точки зрения закона и эффективна на практике.
               </p>
             </div>
           </motion.div>
@@ -92,12 +99,13 @@ export function TrustSection() {
                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
                     <Icon className="w-5 h-5 text-primary" />
                   </div>
-                  <p className="text-sm font-medium leading-snug pt-2">{item.text}</p>
+                  <p className="text-sm font-medium leading-snug pt-2">
+                    {item.text}
+                  </p>
                 </motion.div>
               );
             })}
           </div>
-
         </div>
       </div>
     </section>
