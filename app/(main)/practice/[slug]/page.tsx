@@ -16,9 +16,17 @@ export async function generateMetadata({
   const { slug } = await params
   const area = getPracticeArea(slug)
   if (!area) return {}
+  const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
   return {
     title: `${area.title} — Адвокат Мордвинцев Р.Ф.`,
     description: area.paragraphs[0],
+    openGraph: {
+      title: `${area.title} — Адвокат Мордвинцев Р.Ф.`,
+      description: area.paragraphs[0],
+      type: 'article',
+      url: `${APP_URL}/practice/${slug}`,
+      images: [{ url: '/og-image.jpg', width: 1200, height: 630 }],
+    },
   }
 }
 

@@ -66,7 +66,7 @@ export function PostEditor({ post }: PostEditorProps) {
         const err = await res.json()
         throw new Error(err.error)
       }
-      toast({ title: post ? 'Пост обновлён' : 'Пост создан', variant: 'default' })
+      toast({ title: post ? 'Пост обновлён' : 'Пост создан', variant: 'success' })
       router.push('/admin/posts')
       router.refresh()
     } catch (err) {

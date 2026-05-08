@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ChevronRight, Home } from 'lucide-react'
 
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+
 interface Breadcrumb {
   label: string
   href?: string
@@ -15,10 +17,31 @@ interface PageHeroProps {
   breadcrumbs?: Breadcrumb[]
 }
 
+function buildBreadcrumbSchema(breadcrumbs: Breadcrumb[]) {
+  const items = [
+    { '@type': 'ListItem', position: 1, name: 'Главная', item: APP_URL },
+    ...breadcrumbs.map((crumb, i) => ({
+      '@type': 'ListItem',
+      position: i + 2,
+      name: crumb.label,
+      ...(crumb.href ? { item: `${APP_URL}${crumb.href}` } : {}),
+    })),
+  ]
+  return JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items })
+}
+
 export function PageHero({ title, subtitle, breadcrumbs }: PageHeroProps) {
   return (
     <section className="bg-primary dark:bg-muted/20 border-b border-primary/0 dark:border-border py-6 md:py-8">
       <div className="container mx-auto px-4">
+        {/* BreadcrumbList JSON-LD */}
+        {breadcrumbs && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: buildBreadcrumbSchema(breadcrumbs) }}
+          />
+        )}
+
         {/* Breadcrumbs */}
         {breadcrumbs && (
           <motion.nav

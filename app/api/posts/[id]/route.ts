@@ -113,6 +113,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       revalidatePath('/blog')
       revalidatePath(`/blog/${existing.slug}`)
     }
+    revalidatePath('/admin/posts')
     logger.info('Post deleted', { id })
     return NextResponse.json({ success: true })
   } catch (error) {

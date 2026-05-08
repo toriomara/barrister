@@ -14,6 +14,7 @@ const navLinks = [
   { href: "/", label: "Главная" },
   { href: "/services", label: "Услуги" },
   { href: "/about", label: "Об\u00A0адвокате" },
+  { href: "/cases", label: "Практика" },
   { href: "/blog", label: "Блог" },
   { href: "/contacts", label: "Контакты" },
 ];
@@ -118,23 +119,21 @@ export function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
+          <Link href="/" className="flex items-center gap-2 group shrink-0">
             <img
               src="/logo/logo.svg"
               alt="Logo"
-              width={180}
-              className="dark:hidden"
+              className="dark:hidden w-[130px] md:w-[150px] lg:w-[180px]"
             />
             <img
               src="/logo/logo-white.svg"
               alt="Logo"
-              width={180}
-              className="hidden dark:block"
+              className="hidden dark:block w-[130px] md:w-[150px] lg:w-[180px]"
             />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -158,17 +157,17 @@ export function Header() {
               asChild
               size="lg"
               variant="outline"
-              className="bg-transparent border-primary/30 text-primary hover:bg-primary/10 hover:text-white dark:bg-transparent dark:border-border dark:text-foreground dark:hover:bg-muted hover:text-primary/70"
+              className="bg-transparent border-primary/30 text-primary hover:bg-primary/10 hover:text-white dark:bg-transparent dark:border-border dark:text-foreground dark:hover:bg-muted hover:text-primary/70 px-3"
             >
               <a href="tel:+79608670139">
-                <Phone className="mr-2 w-4 h-4" />
-                +7 (960) 867-01-39
+                <Phone className="w-4 h-4 lg:mr-2" />
+                <span className="hidden lg:inline">+7 (960) 867-01-39</span>
               </a>
             </Button>
 
             {/* Mobile menu button */}
             <button
-              className="md:hidden p-2 rounded-md hover:bg-muted transition-colors"
+              className="lg:hidden p-2 rounded-md hover:bg-muted transition-colors"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Меню"
             >
@@ -190,7 +189,7 @@ export function Header() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden bg-background border-b border-border overflow-hidden"
+            className="lg:hidden bg-background border-b border-border overflow-hidden"
           >
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-1">
               {navLinks.map((link) => (

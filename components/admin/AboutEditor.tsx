@@ -74,7 +74,7 @@ export function AboutEditor({ about }: AboutEditorProps) {
         body: JSON.stringify({ ...data, education, certificates, experience }),
       })
       if (!res.ok) throw new Error()
-      toast({ title: 'Информация сохранена' })
+      toast({ title: 'Информация сохранена', variant: 'success' })
       router.refresh()
     } catch {
       toast({ title: 'Ошибка', variant: 'destructive' })

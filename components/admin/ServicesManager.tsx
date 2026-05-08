@@ -13,6 +13,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { useToast } from '@/hooks/use-toast'
+import { useConfirm } from '@/hooks/use-confirm'
 
 interface Service {
   id: string
@@ -91,6 +92,7 @@ function ServiceForm({
 export function ServicesManager({ initialServices }: ServicesManagerProps) {
   const router = useRouter()
   const { toast } = useToast()
+  const { confirm, ConfirmDialogNode } = useConfirm()
   const [showNew, setShowNew] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -104,7 +106,7 @@ export function ServicesManager({ initialServices }: ServicesManagerProps) {
         body: JSON.stringify(data),
       })
       if (!res.ok) throw new Error()
-      toast({ title: 'Услуга создана' })
+      toast({ title: 'Услуга создана', variant: 'success' })
       setShowNew(false)
       router.refresh()
     } catch {
@@ -123,7 +125,7 @@ export function ServicesManager({ initialServices }: ServicesManagerProps) {
         body: JSON.stringify(data),
       })
       if (!res.ok) throw new Error()
-      toast({ title: 'Услуга обновлена' })
+      toast({ title: 'Услуга обновлена', variant: 'success' })
       setEditingId(null)
       router.refresh()
     } catch {
@@ -134,11 +136,16 @@ export function ServicesManager({ initialServices }: ServicesManagerProps) {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Удалить услугу?')) return
+    const ok = await confirm({
+      title: 'Удалить услугу?',
+      confirmLabel: 'Удалить',
+      variant: 'destructive',
+    })
+    if (!ok) return
     try {
       const res = await fetch(`/api/services/${id}`, { method: 'DELETE' })
       if (!res.ok) throw new Error()
-      toast({ title: 'Услуга удалена' })
+      toast({ title: 'Услуга удалена', variant: 'success' })
       router.refresh()
     } catch {
       toast({ title: 'Ошибка', variant: 'destructive' })
@@ -146,6 +153,8 @@ export function ServicesManager({ initialServices }: ServicesManagerProps) {
   }
 
   return (
+    <>
+    {ConfirmDialogNode}
     <div className="space-y-4">
       {/* New service form */}
       {showNew ? (
@@ -215,5 +224,6 @@ export function ServicesManager({ initialServices }: ServicesManagerProps) {
         </Card>
       ))}
     </div>
+    </>
   )
 }

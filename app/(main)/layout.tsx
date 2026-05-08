@@ -1,5 +1,11 @@
 import { MainLayout } from '@/components/layout/MainLayout'
+import { LegalServiceSchema } from '@/components/seo/LegalServiceSchema'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <MainLayout>{children}</MainLayout>
+  return (
+    <>
+      <LegalServiceSchema />
+      <MainLayout>{children}</MainLayout>
+    </>
+  )
 }

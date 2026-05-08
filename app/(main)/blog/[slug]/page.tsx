@@ -45,6 +45,8 @@ export async function generateStaticParams() {
 
 export const revalidate = 60;
 
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+
 export default async function PostPage({ params }: Props) {
   const { slug } = await params;
   const post = await prisma.post.findUnique({
@@ -53,8 +55,25 @@ export default async function PostPage({ params }: Props) {
 
   if (!post) notFound();
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.publishedAt ?? post.createdAt,
+    dateModified: post.updatedAt,
+    author: { '@type': 'Person', name: 'Мордвинцев Роман Фёдорович' },
+    publisher: { '@type': 'Organization', name: 'Адвокат Мордвинцев Р.Ф.', url: APP_URL },
+    ...(post.coverImage && { image: post.coverImage }),
+    url: `${APP_URL}/blog/${post.slug}`,
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <PageHero
         title={post.title}
         breadcrumbs={[{ label: "Блог", href: "/blog" }, { label: post.title }]}

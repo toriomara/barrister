@@ -17,33 +17,15 @@ const fadeUp = {
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+    <section className="relative min-h-[100vh] flex items-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/90 to-primary/80 dark:from-background dark:via-background dark:to-muted" />
       <div className="absolute inset-0 bg-[url('/images/law-bg.jpg')] bg-cover bg-center opacity-10 dark:opacity-5" />
 
-      {/* Photo - absolute, behind text */}
-      <motion.div
-        custom={0.2}
-        initial="hidden"
-        animate="visible"
-        variants={fadeUp}
-        className="absolute right-0 bottom-0 h-full z-[1] hidden lg:block pointer-events-none select-none -translate-x-24"
-      >
-        <Image
-          src="/advokatTransparent.png"
-          alt="Адвокат"
-          width={900}
-          height={1200}
-          className="object-contain h-full w-auto drop-shadow-2xl"
-          priority
-        />
-      </motion.div>
-
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-8">
+      <div className="container mx-auto px-4 relative z-10 py-16">
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2">
           {/* Text column */}
-          <div>
+          <div className="min-w-0">
             <motion.div
               custom={0}
               initial="hidden"
@@ -115,8 +97,62 @@ export function HeroSection() {
             </motion.div>
           </div>
 
-          {/* Empty right column for spacing */}
-          <div className="hidden lg:block" />
+          {/* Mobile about info */}
+          <div className="lg:hidden order-3">
+            <p className="text-xs font-semibold uppercase tracking-widest text-white/50 dark:text-muted-foreground mb-3">
+              Об адвокате
+            </p>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+              <div>
+                <p className="text-xs text-white/50 dark:text-muted-foreground mb-0.5">Статус</p>
+                <p className="text-sm text-white/90 dark:text-foreground">
+                  Адвокат, филиал № 10 Волгоградской межрайонной коллегии адвокатов
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-white/50 dark:text-muted-foreground mb-0.5">Образование</p>
+                <p className="text-sm text-white/90 dark:text-foreground">
+                  Высшее юридическое (2004). Магистратура юрфака ВолГУ (2013)
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-white/50 dark:text-muted-foreground mb-0.5">Профессиональный путь</p>
+                <p className="text-sm text-white/90 dark:text-foreground">
+                  С 2008 года в Филиале № 10 Волгоградской межрайонной коллегии адвокатов
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-white/50 dark:text-muted-foreground mb-0.5">Достижения</p>
+                <p className="text-sm text-white/90 dark:text-foreground">
+                  Грамота АП Волгоградской области (2014), почётная грамота коллегии адвокатов (2023)
+                </p>
+              </div>
+              <div className="col-span-2">
+                <p className="text-xs text-white/50 dark:text-muted-foreground mb-0.5">Специализация</p>
+                <p className="text-sm text-white/90 dark:text-foreground">
+                  Защита по уголовным делам любой сложности и категории. Участие в качестве защитника на всех стадиях: доследственная проверка, предварительное расследование, суд первой инстанции.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Photo column */}
+          <motion.div
+            custom={0.2}
+            initial="hidden"
+            animate="visible"
+            variants={fadeUp}
+            className="relative flex justify-center lg:justify-end"
+          >
+            <Image
+              src="/advokatTransparent.png"
+              alt="Адвокат"
+              width={1400}
+              height={1800}
+              priority
+              className="object-contain w-auto h-[35vh] md:h-[45vh] lg:h-[85vh] max-w-none drop-shadow-2xl pointer-events-none select-none -z-10"
+            />
+          </motion.div>
         </div>
       </div>
 

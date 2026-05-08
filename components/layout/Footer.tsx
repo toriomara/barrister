@@ -134,6 +134,17 @@ export function Footer() {
               © {new Date().getFullYear()} Адвокат Р.Ф. Мордвинцев. Все права
               защищены.
             </div>
+            <div className="text-xs text-zinc-400 dark:text-zinc-500">
+              Разработано:{" "}
+              <a
+                href="https://t.me/toriomara"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
+              >
+                Владимир Будкевич
+              </a>
+            </div>
           </div>
           <div className="flex gap-4">
             <a

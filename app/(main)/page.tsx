@@ -5,6 +5,8 @@ import { AboutPreview } from '@/components/home/AboutPreview'
 import { StatsSection } from '@/components/home/StatsSection'
 import { TrustSection } from '@/components/home/TrustSection'
 import { ReviewsSection } from '@/components/home/ReviewsSection'
+import { CasesSection } from '@/components/home/CasesSection'
+import { TestimonialsSlider } from '@/components/home/TestimonialsSlider'
 import { CtaSection } from '@/components/home/CtaSection'
 
 export const metadata: Metadata = {
@@ -20,8 +22,10 @@ export default function HomePage() {
       <ServicesPreview />
       <StatsSection />
       <TrustSection />
+      <CasesSection />
       <AboutPreview />
       <ReviewsSection />
+      <TestimonialsSlider />
       <CtaSection />
     </>
   )
