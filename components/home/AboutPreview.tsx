@@ -35,7 +35,7 @@ export function AboutPreview() {
               </div>
             </div>
             {/* Decorative card */}
-            <div className="absolute -bottom-6 -right-2 bg-primary text-white p-4 rounded-xl shadow-lg">
+            <div className="absolute -bottom-2 -right-2 bg-primary text-white p-4 rounded-xl shadow-lg">
               <div className="font-serif text-2xl font-bold">
                 {new Date().getFullYear() - 2008}+
               </div>

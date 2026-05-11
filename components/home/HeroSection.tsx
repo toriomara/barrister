@@ -145,7 +145,7 @@ export function HeroSection() {
             className="relative flex justify-center lg:justify-end"
           >
             <Image
-              src="/advokatTransparent.png"
+              src="/advokatTransparent_2.png"
               alt="Адвокат"
               width={1400}
               height={1800}

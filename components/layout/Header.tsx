@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Phone, ChevronDown } from "lucide-react";
+import { Menu, X, Phone, ChevronDown, Search } from "lucide-react";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import { SearchModal } from "@/components/layout/SearchModal";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { PRACTICE_AREAS } from "@/lib/practice-areas";
@@ -95,6 +96,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobilePracticeOpen, setMobilePracticeOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -106,6 +108,17 @@ export function Header() {
     setMobileOpen(false);
     setMobilePracticeOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   return (
     <header
@@ -152,7 +165,14 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <ThemeToggle />
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="hidden lg:flex p-2 rounded-md text-foreground/70 hover:text-foreground hover:bg-muted transition-colors"
+              aria-label="Поиск"
+            >
+              <Search className="w-4 h-4" />
+            </button>
+            <span className="hidden lg:block"><ThemeToggle /></span>
             <Button
               asChild
               size="lg"
@@ -181,6 +201,8 @@ export function Header() {
         </div>
       </div>
 
+      <SearchModal open={searchOpen} onOpenChange={setSearchOpen} />
+
       {/* Mobile Navigation */}
       <AnimatePresence>
         {mobileOpen && (
@@ -192,6 +214,18 @@ export function Header() {
             className="lg:hidden bg-background border-b border-border overflow-hidden"
           >
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-1">
+              {/* Search + Theme row */}
+              <div className="flex items-center gap-2 pb-3 mb-1 border-b border-border">
+                <button
+                  onClick={() => { setMobileOpen(false); setSearchOpen(true); }}
+                  className="flex items-center gap-2 flex-1 px-4 py-2.5 rounded-md text-sm font-medium text-foreground/70 hover:text-foreground hover:bg-muted transition-colors"
+                >
+                  <Search className="w-4 h-4" />
+                  Поиск по сайту
+                </button>
+                <ThemeToggle />
+              </div>
+
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
