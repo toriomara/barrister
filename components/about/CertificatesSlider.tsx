@@ -2,28 +2,28 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, FileText } from "lucide-react";
 import Image from "next/image";
 
-const IMAGES = [
-  "/diplomas/lawer_2014.jpg",
-  "/diplomas/certificate.webp",
-  "/diplomas/certificate_2023.jpg",
-  "/diplomas/certificate_2024.jpg",
-  "/diplomas/certificate_2.webp",
-  "/diplomas/certificate_3.webp",
-  "/diplomas/certificate_4.webp",
-  "/diplomas/certificate_5.webp",
-  "/diplomas/certificate_6.webp",
-];
+interface Certificate {
+  id: string;
+  title: string | null;
+  fileUrl: string;
+  fileType: string;
+  order: number;
+}
 
-const TOTAL = IMAGES.length;
+interface CertificatesSliderProps {
+  certificates: Certificate[];
+}
 
-export function CertificatesSlider() {
+export function CertificatesSlider({ certificates }: CertificatesSliderProps) {
   const [index, setIndex] = useState(0);
   const [cardWidth, setCardWidth] = useState(0);
   const [visibleCount, setVisibleCount] = useState(3);
   const trackRef = useRef<HTMLDivElement>(null);
+
+  const total = certificates.length;
 
   useEffect(() => {
     const measure = () => {
@@ -38,21 +38,24 @@ export function CertificatesSlider() {
     return () => window.removeEventListener("resize", measure);
   }, []);
 
-  const maxIndex = TOTAL - visibleCount;
+  const maxIndex = Math.max(0, total - visibleCount);
 
   useEffect(() => {
+    if (total <= visibleCount) return;
     const timer = setInterval(() => {
       setIndex((i) => (i >= maxIndex ? 0 : i + 1));
     }, 5000);
     return () => clearInterval(timer);
-  }, [maxIndex]);
+  }, [maxIndex, total, visibleCount]);
+
   const prev = () => setIndex((i) => Math.max(0, i - 1));
   const next = () => setIndex((i) => Math.min(maxIndex, i + 1));
+
+  if (total === 0) return null;
 
   return (
     <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
-        {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <p className="text-primary font-medium text-sm uppercase tracking-wider mb-1">
@@ -82,27 +85,40 @@ export function CertificatesSlider() {
           </div>
         </div>
 
-        {/* Slider viewport */}
         <div className="overflow-hidden" ref={trackRef}>
           <motion.div
             className="flex"
             animate={{ x: cardWidth > 0 ? -index * cardWidth : 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
-            {Array.from({ length: TOTAL }).map((_, i) => (
+            {certificates.map((cert, i) => (
               <div
-                key={i}
+                key={cert.id}
                 style={{ minWidth: cardWidth > 0 ? cardWidth : undefined }}
                 className="px-3"
               >
-                <div className="aspect-[3/4] rounded-2xl overflow-hidden border border-border relative select-none">
-                  <Image
-                    src={IMAGES[i]}
-                    alt={`Грамота ${i + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw"
-                  />
+                <div className="aspect-[3/4] rounded-2xl overflow-hidden border border-border relative select-none bg-muted">
+                  {cert.fileType === "pdf" ? (
+                    <a
+                      href={cert.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-col items-center justify-center h-full gap-3 text-muted-foreground hover:text-foreground transition-colors p-6"
+                    >
+                      <FileText className="w-12 h-12" />
+                      <span className="text-sm text-center font-medium">
+                        {cert.title || "Сертификат"}
+                      </span>
+                    </a>
+                  ) : (
+                    <Image
+                      src={cert.fileUrl}
+                      alt={cert.title || `Грамота ${i + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw"
+                    />
+                  )}
                 </div>
               </div>
             ))}

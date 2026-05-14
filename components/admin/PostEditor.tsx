@@ -13,6 +13,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
 import { useToast } from '@/hooks/use-toast'
 import { Save, Eye, EyeOff } from 'lucide-react'
+import { POST_CATEGORIES } from '@/lib/post-categories'
 
 interface Post {
   id: string
@@ -20,6 +21,7 @@ interface Post {
   excerpt: string
   content: string
   coverImage?: string | null
+  category?: string | null
   published: boolean
   metaTitle?: string | null
   metaDesc?: string | null
@@ -46,6 +48,7 @@ export function PostEditor({ post }: PostEditorProps) {
       excerpt: post?.excerpt ?? '',
       content: post?.content ?? '',
       coverImage: post?.coverImage ?? '',
+      category: (post?.category as PostInput['category']) ?? null,
       published: post?.published ?? false,
       metaTitle: post?.metaTitle ?? '',
       metaDesc: post?.metaDesc ?? '',
@@ -140,6 +143,23 @@ export function PostEditor({ post }: PostEditorProps) {
                 <Save className="w-4 h-4 mr-2" />
                 {isSubmitting ? 'Сохранение...' : 'Сохранить'}
               </Button>
+            </CardContent>
+          </Card>
+
+          {/* Category */}
+          <Card>
+            <CardContent className="p-4 space-y-2">
+              <Label htmlFor="category" className="text-sm font-semibold">Категория</Label>
+              <select
+                id="category"
+                {...register('category')}
+                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
+              >
+                <option value="">— не выбрана —</option>
+                {Object.entries(POST_CATEGORIES).map(([key, label]) => (
+                  <option key={key} value={key}>{label}</option>
+                ))}
+              </select>
             </CardContent>
           </Card>
 

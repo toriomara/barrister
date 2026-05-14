@@ -32,8 +32,17 @@ interface AboutData {
   experience?: unknown;
 }
 
+interface CertificateItem {
+  id: string;
+  title: string | null;
+  fileUrl: string;
+  fileType: string;
+  order: number;
+}
+
 interface AboutContentProps {
   about: AboutData | null;
+  certificates?: CertificateItem[];
 }
 
 const sectionVariant = {
@@ -45,7 +54,7 @@ const sectionVariant = {
   }),
 };
 
-export function AboutContent({ about }: AboutContentProps) {
+export function AboutContent({ about, certificates = [] }: AboutContentProps) {
   if (!about) {
     return (
       <div className="py-20 text-center text-muted-foreground">
@@ -60,7 +69,7 @@ export function AboutContent({ about }: AboutContentProps) {
       institution: string;
       degree: string;
     }>) || [];
-  const certificates =
+  const certsMeta =
     (about.certificates as Array<{
       year: string;
       title: string;
@@ -191,8 +200,8 @@ export function AboutContent({ about }: AboutContentProps) {
             </motion.div>
           )}
 
-          {/* Certificates */}
-          {certificates.length > 0 && (
+          {/* Certificates metadata */}
+          {certsMeta.length > 0 && (
             <motion.div
               custom={3}
               initial="hidden"
@@ -209,7 +218,7 @@ export function AboutContent({ about }: AboutContentProps) {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {certificates.map((item, i) => (
+                    {certsMeta.map((item, i) => (
                       <div key={i} className="flex gap-4">
                         <div className="text-sm font-bold text-primary w-12 shrink-0 pt-0.5">
                           {item.year}
@@ -323,7 +332,7 @@ export function AboutContent({ about }: AboutContentProps) {
         </div>
       </section>
 
-      <CertificatesSlider />
+      <CertificatesSlider certificates={certificates} />
       <ReviewsSlider />
     </>
   );

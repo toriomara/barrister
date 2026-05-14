@@ -13,7 +13,10 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function AboutPage() {
-  const about = await prisma.about.findFirst();
+  const [about, certificates] = await Promise.all([
+    prisma.about.findFirst(),
+    prisma.certificate.findMany({ orderBy: { order: 'asc' } }),
+  ]);
 
   return (
     <>
@@ -22,7 +25,7 @@ export default async function AboutPage() {
         subtitle="Биография, образование и опыт"
         breadcrumbs={[{ label: "Об адвокате" }]}
       />
-      <AboutContent about={about} />
+      <AboutContent about={about} certificates={certificates} />
     </>
   );
 }

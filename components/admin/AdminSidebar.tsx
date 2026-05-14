@@ -9,6 +9,7 @@ import {
   Briefcase,
   User,
   MessageSquare,
+  Award,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -17,6 +18,7 @@ const navItems = [
   { href: "/admin/posts", icon: FileText, label: "Блог" },
   { href: "/admin/services", icon: Briefcase, label: "Услуги" },
   { href: "/admin/about", icon: User, label: "Об адвокате" },
+  { href: "/admin/certificates", icon: Award, label: "Сертификаты" },
   { href: "/admin/messages", icon: MessageSquare, label: "Сообщения" },
 ];
 

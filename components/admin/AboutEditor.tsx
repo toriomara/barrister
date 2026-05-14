@@ -1,17 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Plus, Trash2, Save } from 'lucide-react'
+import { Plus, Trash2, Save, Upload, X } from 'lucide-react'
 import { aboutSchema, type AboutInput } from '@/schemas/about'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
 import { useToast } from '@/hooks/use-toast'
 
 interface AboutData {
@@ -38,6 +37,8 @@ type ExperienceItem = { period: string; position: string; description: string }
 export function AboutEditor({ about }: AboutEditorProps) {
   const router = useRouter()
   const { toast } = useToast()
+  const photoInputRef = useRef<HTMLInputElement>(null)
+  const [photoUploading, setPhotoUploading] = useState(false)
 
   const [education, setEducation] = useState<EducationItem[]>(
     (about?.education as EducationItem[]) || []
@@ -52,6 +53,8 @@ export function AboutEditor({ about }: AboutEditorProps) {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<AboutInput>({
     resolver: zodResolver(aboutSchema),
@@ -65,6 +68,35 @@ export function AboutEditor({ about }: AboutEditorProps) {
       address: about?.address || '',
     },
   })
+
+  const photoValue = watch('photo')
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setPhotoUploading(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('folder', 'photos')
+      const res = await fetch('/api/upload', { method: 'POST', body: formData })
+      if (!res.ok) {
+        const err = await res.json()
+        throw new Error(err.error || 'Ошибка загрузки')
+      }
+      const { url } = await res.json()
+      setValue('photo', url, { shouldValidate: true })
+      toast({ title: 'Фото загружено', variant: 'success' })
+    } catch (err) {
+      toast({
+        title: err instanceof Error ? err.message : 'Ошибка загрузки фото',
+        variant: 'destructive',
+      })
+    } finally {
+      setPhotoUploading(false)
+      if (photoInputRef.current) photoInputRef.current.value = ''
+    }
+  }
 
   const onSubmit = async (data: AboutInput) => {
     try {
@@ -106,8 +138,50 @@ export function AboutEditor({ about }: AboutEditorProps) {
             {errors.bio && <p className="text-xs text-destructive">{errors.bio.message}</p>}
           </div>
           <div className="space-y-1.5">
-            <Label>Фото (URL)</Label>
-            <Input placeholder="https://..." {...register('photo')} />
+            <Label>Фото</Label>
+            <div className="flex gap-3 items-start">
+              {/* Preview */}
+              {photoValue && (
+                <div className="relative w-16 h-20 rounded-lg overflow-hidden border border-border bg-muted shrink-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={photoValue}
+                    alt="Фото"
+                    className="w-full h-full object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setValue('photo', '', { shouldValidate: true })}
+                    className="absolute top-0.5 right-0.5 w-4 h-4 bg-black/60 rounded-full flex items-center justify-center text-white"
+                    aria-label="Удалить фото"
+                  >
+                    <X className="w-2.5 h-2.5" />
+                  </button>
+                </div>
+              )}
+              <div className="flex-1 space-y-2">
+                <Input placeholder="https://..." {...register('photo')} />
+                <div>
+                  <input
+                    ref={photoInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    className="hidden"
+                    onChange={handlePhotoUpload}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={photoUploading}
+                    onClick={() => photoInputRef.current?.click()}
+                  >
+                    <Upload className="w-3.5 h-3.5 mr-1.5" />
+                    {photoUploading ? 'Загрузка...' : 'Загрузить'}
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
