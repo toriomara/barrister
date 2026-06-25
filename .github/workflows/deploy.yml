@@ -1,4 +1,4 @@
-name: CI/CD - Gitflow (Barister)
+name: CI/CD - Gitflow Barrister
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -60,18 +60,40 @@ jobs:
 
             echo "🚀 Starting PRODUCTION deployment..."
 
-            cd /var/www/barister
+            cd /var/www/barrister
 
-            git fetch origin
-            git reset --hard origin/main
-            git clean -fd
+            echo "📥 Updating repository..."
+          git fetch origin
+          git reset --hard origin/main
+          git clean -fd
 
-            npm ci --production
-            npx prisma generate
+          echo "📦 Installing dependencies..."
+          export NODE_ENV=production 
+          npm ci
 
-            npm run build
+          echo "🗄️ Generating Prisma client..."
+          npx prisma generate
 
-            pm2 restart barister || pm2 start npm --name "barister" -- start
+          echo "🗄️ Syncing schema..."
+          npx prisma db push
 
-            echo "✅ Deployment completed successfully! ($(date))"
+          # Выполнять только если сид безопасен для повторного запуска/идемпотентен
+          # npx prisma db seed
+
+          # Check if .env file exists
+          test -f .env || (echo ".env not found!" && exit 1)
+
+          echo "🏗️ Building project..."
+          NODE_OPTIONS=--max-old-space-size=768 npm run build 
+          pm2 restart barrister --update-env
+
+          echo "♻️ Restarting PM2..."
+          pm2 describe barrister > /dev/null \
+            && pm2 restart barrister --update-env \
+            || pm2 start npm --name "barrister" -- start
+
+          pm2 save
+
+          echo "✅ Deployment completed successfully! ($(date))"
+
           EOF
