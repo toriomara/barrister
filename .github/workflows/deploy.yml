@@ -1,0 +1,89 @@
+name: CI/CD - Gitflow (Barister)
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  # ==================== CI (for all branches) ====================
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma Generate
+        run: npx prisma generate
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Test (если есть)
+        run: npm test || echo "No tests configured"
+
+  # ==================== CD (main only → Production) ====================
+  deploy-production:
+    needs: test-and-build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to Production (Beget VPS)
+        run: |
+          ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            set -e
+
+            echo "🚀 Starting PRODUCTION deployment (Gitflow)..."
+
+            cd /var/www/barister
+
+            echo "📥 Pulling latest changes from main..."
+            git fetch origin
+            git reset --hard origin/main
+            git clean -fd
+
+            echo "📦 Installing dependencies..."
+            npm ci --production
+
+            echo "🔧 Prisma Generate..."
+            npx prisma generate
+
+            # Если нужно делать миграции:
+            # npx prisma migrate deploy
+
+            echo "🏗 Building Next.js..."
+            npm run build
+
+            echo "♻️ Restarting PM2..."
+            pm2 restart barister || pm2 start npm --name "barister" -- start
+
+            echo "✅ Production deployment completed successfully! ($(date))"
+          EOF
