@@ -5,6 +5,7 @@ export const postSchema = z.object({
   excerpt: z.string().min(10, 'Минимум 10 символов').max(500, 'Максимум 500 символов'),
   content: z.string().min(10, 'Добавьте содержимое поста'),
   coverImage: z.string().optional().or(z.literal('')),
+  coverImageCaption: z.string().max(300, 'Максимум 300 символов').optional().or(z.literal('')),
   category: z.enum(['informational', 'practice', 'faq', 'local']).nullable().optional(),
   published: z.boolean().default(false),
   metaTitle: z.string().max(70, 'Максимум 70 символов').optional().or(z.literal('')),

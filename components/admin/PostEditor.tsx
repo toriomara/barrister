@@ -21,6 +21,7 @@ interface Post {
   excerpt: string
   content: string
   coverImage?: string | null
+  coverImageCaption?: string | null
   category?: string | null
   published: boolean
   metaTitle?: string | null
@@ -48,6 +49,7 @@ export function PostEditor({ post }: PostEditorProps) {
       excerpt: post?.excerpt ?? '',
       content: post?.content ?? '',
       coverImage: post?.coverImage ?? '',
+      coverImageCaption: post?.coverImageCaption ?? '',
       category: (post?.category as PostInput['category']) ?? null,
       published: post?.published ?? false,
       metaTitle: post?.metaTitle ?? '',
@@ -169,6 +171,9 @@ export function PostEditor({ post }: PostEditorProps) {
               <Label htmlFor="coverImage">Обложка (URL)</Label>
               <Input id="coverImage" placeholder="https://..." {...register('coverImage')} />
               {errors.coverImage && <p className="text-xs text-destructive">{errors.coverImage.message}</p>}
+              <Label htmlFor="coverImageCaption" className="text-xs text-muted-foreground">Подпись под фото</Label>
+              <Input id="coverImageCaption" placeholder="Необязательно..." {...register('coverImageCaption')} />
+              {errors.coverImageCaption && <p className="text-xs text-destructive">{errors.coverImageCaption.message}</p>}
             </CardContent>
           </Card>
 

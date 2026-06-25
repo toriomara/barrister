@@ -12,6 +12,7 @@ interface Post {
   publishedAt?: Date | null
   excerpt: string
   coverImage?: string | null
+  coverImageCaption?: string | null
 }
 
 interface PostContentProps {
@@ -54,14 +55,21 @@ export function PostContent({ post }: PostContentProps) {
             <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="relative h-72 md:h-96 rounded-xl overflow-hidden mb-10 shadow-lg"
+              className="mb-10"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={post.coverImage}
-                alt={post.title}
-                className="w-full h-full object-cover"
-              />
+              <div className="relative h-72 md:h-96 rounded-xl overflow-hidden shadow-lg">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={post.coverImage}
+                  alt={post.coverImageCaption || post.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              {post.coverImageCaption && (
+                <p className="mt-2 text-xs text-muted-foreground italic">
+                  {post.coverImageCaption}
+                </p>
+              )}
             </motion.div>
           )}
 

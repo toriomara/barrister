@@ -32,7 +32,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
     }
 
-    const { title, excerpt, content, coverImage, category, published, metaTitle, metaDesc } = parsed.data
+    const { title, excerpt, content, coverImage, coverImageCaption, category, published, metaTitle, metaDesc } = parsed.data
 
     const existing = await prisma.post.findUnique({ where: { id } })
     if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
@@ -52,6 +52,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         excerpt,
         content,
         coverImage: coverImage || null,
+        coverImageCaption: coverImageCaption || null,
         category: category ?? null,
         published,
         publishedAt: published && !existing.publishedAt ? new Date() : existing.publishedAt,

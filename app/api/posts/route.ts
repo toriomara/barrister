@@ -28,6 +28,7 @@ export async function GET(request: NextRequest) {
           slug: true,
           excerpt: true,
           coverImage: true,
+          coverImageCaption: true,
           category: true,
           published: true,
           publishedAt: true,
@@ -57,7 +58,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
     }
 
-    const { title, excerpt, content, coverImage, category, published, metaTitle, metaDesc } = parsed.data
+    const { title, excerpt, content, coverImage, coverImageCaption, category, published, metaTitle, metaDesc } = parsed.data
 
     let slug = slugify(title)
     const existing = await prisma.post.findUnique({ where: { slug } })
@@ -72,6 +73,7 @@ export async function POST(request: NextRequest) {
         excerpt,
         content,
         coverImage: coverImage || null,
+        coverImageCaption: coverImageCaption || null,
         category: category ?? null,
         published,
         publishedAt: published ? new Date() : null,

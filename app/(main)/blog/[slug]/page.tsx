@@ -18,6 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       metaDesc: true,
       excerpt: true,
       coverImage: true,
+      coverImageCaption: true,
     },
   });
 

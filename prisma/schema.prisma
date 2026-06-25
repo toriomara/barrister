@@ -25,8 +25,9 @@ model Post {
   slug        String    @unique
   excerpt     String
   content     String
-  coverImage  String?
-  category    String?
+  coverImage         String?
+  coverImageCaption  String?
+  category           String?
   published   Boolean   @default(false)
   publishedAt DateTime?
   metaTitle   String?

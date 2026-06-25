@@ -12,8 +12,8 @@ export interface PlatformReview {
 export const platformReviews: PlatformReview[] = [
   {
     name: 'Яндекс Карты',
-    rating: 4.4,
-    reviews: 7,
+    rating: 4.5,
+    reviews: 9,
     url: 'https://yandex.com/maps/org/advokat_mordvintsev_r_f_/149778884753/',
     updatedAt: '2026-04-14',
   },
@@ -26,7 +26,7 @@ export const platformReviews: PlatformReview[] = [
   },
   {
     name: 'Harant.ru',
-    rating: 9.1,
+    rating: 9.2,
     reviews: 11,
     url: 'https://harant.ru/lawyers/volgograd/mordvinczev-roman-fedorovich/',
     updatedAt: '2026-04-14',
