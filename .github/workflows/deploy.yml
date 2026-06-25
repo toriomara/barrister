@@ -12,7 +12,7 @@ on:
 
 jobs:
   # ==================== CI (for all branches) ====================
-  test-and-build:
+  build-and-check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -36,12 +36,9 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Test (если есть)
-        run: npm test || echo "No tests configured"
-
   # ==================== CD (main only → Production) ====================
   deploy-production:
-    needs: test-and-build
+    needs: build-and-check
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
@@ -75,9 +72,6 @@ jobs:
 
             echo "🔧 Prisma Generate..."
             npx prisma generate
-
-            # Если нужно делать миграции:
-            # npx prisma migrate deploy
 
             echo "🏗 Building Next.js..."
             npm run build
