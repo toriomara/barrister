@@ -135,7 +135,7 @@ export function Footer() {
               защищены.
             </div>
             <div className="text-xs text-zinc-400 dark:text-zinc-500">
-              Разработано:{" "}
+              Разработка:{" "}
               <a
                 href="https://t.me/toriomara"
                 target="_blank"
